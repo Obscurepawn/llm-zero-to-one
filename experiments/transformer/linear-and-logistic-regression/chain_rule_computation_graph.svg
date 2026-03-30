@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1f2937"/>
+    </marker>
+    <style>
+      .title { font: 700 26px Arial, sans-serif; fill: #111827; }
+      .label { font: 600 20px Arial, sans-serif; fill: #111827; }
+      .small { font: 500 16px Arial, sans-serif; fill: #374151; }
+      .tiny { font: 500 15px Arial, sans-serif; fill: #4b5563; }
+      .box { fill: #f8fafc; stroke: #1f2937; stroke-width: 2; rx: 14; ry: 14; }
+      .forward { stroke: #2563eb; stroke-width: 4; fill: none; marker-end: url(#arrow); }
+      .backward { stroke: #dc2626; stroke-width: 4; fill: none; marker-end: url(#arrow); }
+      .guide { stroke: #9ca3af; stroke-width: 2; stroke-dasharray: 8 8; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="560" fill="#ffffff"/>
+
+  <text x="600" y="44" text-anchor="middle" class="title">Computation Graph and Chain Rule</text>
+
+  <rect class="box" x="70" y="190" width="180" height="120"/>
+  <text x="160" y="236" text-anchor="middle" class="label">W</text>
+  <text x="160" y="268" text-anchor="middle" class="small">parameters</text>
+  <text x="160" y="294" text-anchor="middle" class="tiny">changes here start the chain</text>
+
+  <rect class="box" x="325" y="190" width="230" height="120"/>
+  <text x="440" y="232" text-anchor="middle" class="label">y_pred_i</text>
+  <text x="440" y="264" text-anchor="middle" class="small">x_i^T W + b</text>
+  <text x="440" y="290" text-anchor="middle" class="tiny">prediction of sample i</text>
+
+  <rect class="box" x="640" y="190" width="200" height="120"/>
+  <text x="740" y="232" text-anchor="middle" class="label">e_i</text>
+  <text x="740" y="264" text-anchor="middle" class="small">y_pred_i - y_true_i</text>
+  <text x="740" y="290" text-anchor="middle" class="tiny">prediction error</text>
+
+  <rect class="box" x="925" y="190" width="190" height="120"/>
+  <text x="1020" y="232" text-anchor="middle" class="label">l_i</text>
+  <text x="1020" y="264" text-anchor="middle" class="small">e_i^2</text>
+  <text x="1020" y="290" text-anchor="middle" class="tiny">sample loss</text>
+
+  <path class="forward" d="M 250 250 L 325 250"/>
+  <path class="forward" d="M 555 250 L 640 250"/>
+  <path class="forward" d="M 840 250 L 925 250"/>
+
+  <text x="286" y="168" text-anchor="middle" class="small">forward</text>
+  <text x="598" y="168" text-anchor="middle" class="small">forward</text>
+  <text x="883" y="168" text-anchor="middle" class="small">forward</text>
+
+  <text x="286" y="145" text-anchor="middle" class="tiny">dy_pred_i / dW</text>
+  <text x="598" y="145" text-anchor="middle" class="tiny">de_i / dy_pred_i</text>
+  <text x="883" y="145" text-anchor="middle" class="tiny">dl_i / de_i</text>
+
+  <path class="backward" d="M 925 360 L 840 360"/>
+  <path class="backward" d="M 640 360 L 555 360"/>
+  <path class="backward" d="M 325 360 L 250 360"/>
+
+  <text x="883" y="404" text-anchor="middle" class="small">backward gradient</text>
+  <text x="598" y="404" text-anchor="middle" class="small">backward gradient</text>
+  <text x="286" y="404" text-anchor="middle" class="small">backward gradient</text>
+
+  <text x="883" y="428" text-anchor="middle" class="tiny">dl_i / de_i</text>
+  <text x="598" y="428" text-anchor="middle" class="tiny">de_i / dy_pred_i</text>
+  <text x="286" y="428" text-anchor="middle" class="tiny">dy_pred_i / dW</text>
+
+  <path class="guide" d="M 160 130 L 160 190"/>
+  <path class="guide" d="M 440 130 L 440 190"/>
+  <path class="guide" d="M 740 130 L 740 190"/>
+  <path class="guide" d="M 1020 130 L 1020 190"/>
+
+  <text x="600" y="490" text-anchor="middle" class="label">
+    dl_i / dW = (dl_i / de_i) * (de_i / dy_pred_i) * (dy_pred_i / dW)
+  </text>
+  <text x="600" y="522" text-anchor="middle" class="small">
+    Total sensitivity = product of local sensitivities along the path
+  </text>
+</svg>
