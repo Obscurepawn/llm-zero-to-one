@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1260" height="560" viewBox="0 0 1260 560">
+  <defs>
+    <style>
+      .title { font: 700 28px 'Noto Sans SC', 'Microsoft YaHei', sans-serif; fill: #111827; }
+      .subtitle { font: 500 17px 'Noto Sans SC', 'Microsoft YaHei', sans-serif; fill: #4b5563; }
+      .label { font: 600 18px 'Noto Sans SC', 'Microsoft YaHei', sans-serif; fill: #111827; }
+      .tiny { font: 500 14px 'Noto Sans SC', 'Microsoft YaHei', sans-serif; fill: #6b7280; }
+      .eq { font: 600 16px 'JetBrains Mono', 'Consolas', monospace; fill: #1f2937; }
+      .weight { font: 600 15px 'JetBrains Mono', 'Consolas', monospace; fill: #2563eb; }
+      .panel { fill: #f8fafc; stroke: #1f2937; stroke-width: 2; rx: 18; ry: 18; }
+      .note { fill: #eef2ff; stroke: #2563eb; stroke-width: 1.8; rx: 14; ry: 14; }
+      .input-node { fill: #fef3c7; stroke: #92400e; stroke-width: 2; }
+      .bias-node { fill: #fde68a; stroke: #92400e; stroke-width: 2; }
+      .sum-node { fill: #dbeafe; stroke: #1d4ed8; stroke-width: 2.4; }
+      .output-node { fill: #dcfce7; stroke: #166534; stroke-width: 2.2; }
+      .activation { fill: #fce7f3; stroke: #be185d; stroke-width: 2; rx: 14; ry: 14; }
+      .flow { stroke: #2563eb; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .flow-bias { stroke: #d97706; stroke-width: 2.5; fill: none; marker-end: url(#arrow-bias); }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrow-bias" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#d97706"/>
+    </marker>
+  </defs>
+
+  <rect width="1260" height="560" fill="#ffffff"/>
+  <rect x="20" y="20" width="1220" height="520" class="panel"/>
+  <text x="630" y="56" text-anchor="middle" class="title">两层感知机：中间先做一层非线性加工，再输出概率</text>
+  <text x="630" y="84" text-anchor="middle" class="subtitle">第一层把输入变成中间特征，第二层再把这些特征合成最终结果</text>
+
+  <circle cx="110" cy="150" r="22" class="bias-node"/>
+  <text x="110" y="156" text-anchor="middle" class="label">1</text>
+  <text x="110" y="187" text-anchor="middle" class="tiny">b1</text>
+  <circle cx="110" cy="244" r="28" class="input-node"/>
+  <text x="110" y="251" text-anchor="middle" class="label">x1</text>
+  <circle cx="110" cy="322" r="28" class="input-node"/>
+  <text x="110" y="329" text-anchor="middle" class="label">x2</text>
+
+  <line x1="132" y1="244" x2="328" y2="188" class="flow"/>
+  <line x1="134" y1="244" x2="328" y2="278" class="flow"/>
+  <line x1="134" y1="322" x2="328" y2="214" class="flow"/>
+  <line x1="134" y1="322" x2="328" y2="304" class="flow"/>
+  <line x1="132" y1="150" x2="330" y2="172" class="flow-bias"/>
+  <line x1="132" y1="150" x2="330" y2="292" class="flow-bias"/>
+  <text x="200" y="170" class="weight">b1</text>
+  <text x="206" y="205" class="weight">w11</text>
+  <text x="206" y="285" class="weight">w12</text>
+  <text x="206" y="255" class="weight">w21</text>
+  <text x="206" y="325" class="weight">w22</text>
+
+  <circle cx="372" cy="188" r="34" class="sum-node"/>
+  <text x="372" y="181" text-anchor="middle" class="label">Σ</text>
+  <text x="372" y="206" text-anchor="middle" class="tiny">z1</text>
+  <circle cx="372" cy="278" r="34" class="sum-node"/>
+  <text x="372" y="271" text-anchor="middle" class="label">Σ</text>
+  <text x="372" y="296" text-anchor="middle" class="tiny">z2</text>
+
+  <line x1="406" y1="188" x2="490" y2="188" class="flow"/>
+  <line x1="406" y1="278" x2="490" y2="278" class="flow"/>
+
+  <rect x="490" y="148" width="108" height="80" class="activation"/>
+  <text x="544" y="180" text-anchor="middle" class="label">激活</text>
+  <text x="544" y="208" text-anchor="middle" class="eq">tanh</text>
+  <rect x="490" y="238" width="108" height="80" class="activation"/>
+  <text x="544" y="270" text-anchor="middle" class="label">激活</text>
+  <text x="544" y="298" text-anchor="middle" class="eq">tanh</text>
+
+  <line x1="598" y1="188" x2="696" y2="188" class="flow"/>
+  <line x1="598" y1="278" x2="696" y2="278" class="flow"/>
+
+  <circle cx="736" cy="188" r="26" class="output-node"/>
+  <text x="736" y="195" text-anchor="middle" class="label">h1</text>
+  <circle cx="736" cy="278" r="26" class="output-node"/>
+  <text x="736" y="285" text-anchor="middle" class="label">h2</text>
+
+  <circle cx="914" cy="138" r="22" class="bias-node"/>
+  <text x="914" y="144" text-anchor="middle" class="label">1</text>
+  <text x="914" y="174" text-anchor="middle" class="tiny">b2</text>
+
+  <line x1="762" y1="188" x2="870" y2="222" class="flow"/>
+  <line x1="762" y1="188" x2="870" y2="176" class="flow"/>
+  <line x1="762" y1="278" x2="870" y2="196" class="flow"/>
+  <line x1="762" y1="278" x2="870" y2="244" class="flow"/>
+  <line x1="914" y1="160" x2="914" y2="208" class="flow-bias"/>
+  <text x="824" y="214" class="weight">W2</text>
+
+  <circle cx="944" cy="210" r="38" class="sum-node"/>
+  <text x="944" y="203" text-anchor="middle" class="label">Σ</text>
+  <text x="944" y="228" text-anchor="middle" class="tiny">z2</text>
+  <line x1="982" y1="210" x2="1050" y2="210" class="flow"/>
+
+  <rect x="1050" y="172" width="116" height="76" class="activation"/>
+  <text x="1108" y="202" text-anchor="middle" class="label">激活</text>
+  <text x="1108" y="228" text-anchor="middle" class="eq">sigmoid</text>
+  <line x1="1166" y1="210" x2="1212" y2="210" class="flow"/>
+
+  <circle cx="1238" cy="210" r="28" class="output-node"/>
+  <text x="1238" y="217" text-anchor="middle" class="label">p</text>
+
+  <rect x="60" y="396" width="1140" height="86" class="note"/>
+  <text x="630" y="430" text-anchor="middle" class="eq">h = tanh(X @ W1 + b1)</text>
+  <text x="630" y="462" text-anchor="middle" class="eq">p = sigmoid(h @ W2 + b2)</text>
+  <text x="630" y="488" text-anchor="middle" class="tiny">第一层的输出 h 是“中间特征”，它不是答案本身，而是第二层继续加工的材料。</text>
+</svg>

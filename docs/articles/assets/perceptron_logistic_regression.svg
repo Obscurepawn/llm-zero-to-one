@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="360" viewBox="0 0 980 360">
+  <defs>
+    <style>
+      .title { font: 700 26px 'Noto Sans SC', 'Microsoft YaHei', sans-serif; fill: #111827; }
+      .subtitle { font: 500 16px 'Noto Sans SC', 'Microsoft YaHei', sans-serif; fill: #4b5563; }
+      .label { font: 600 18px 'Noto Sans SC', 'Microsoft YaHei', sans-serif; fill: #111827; }
+      .tiny { font: 500 14px 'Noto Sans SC', 'Microsoft YaHei', sans-serif; fill: #6b7280; }
+      .eq { font: 600 16px 'JetBrains Mono', 'Consolas', monospace; fill: #1f2937; }
+      .weight { font: 600 15px 'JetBrains Mono', 'Consolas', monospace; fill: #2563eb; }
+      .panel { fill: #f8fafc; stroke: #1f2937; stroke-width: 2; rx: 18; ry: 18; }
+      .note { fill: #eef2ff; stroke: #2563eb; stroke-width: 1.8; rx: 14; ry: 14; }
+      .input-node { fill: #fef3c7; stroke: #92400e; stroke-width: 2; }
+      .bias-node { fill: #fde68a; stroke: #92400e; stroke-width: 2; }
+      .sum-node { fill: #dbeafe; stroke: #1d4ed8; stroke-width: 2.4; }
+      .output-node { fill: #dcfce7; stroke: #166534; stroke-width: 2.2; }
+      .activation { fill: #fce7f3; stroke: #be185d; stroke-width: 2; rx: 14; ry: 14; }
+      .flow { stroke: #2563eb; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"/>
+    </marker>
+  </defs>
+
+  <rect width="980" height="360" fill="#ffffff"/>
+  <rect x="20" y="20" width="940" height="320" class="panel"/>
+  <text x="490" y="55" text-anchor="middle" class="title">逻辑回归也是单层感知机，只是在输出前加上 sigmoid</text>
+  <text x="490" y="82" text-anchor="middle" class="subtitle">输出不再是任意实数，而是 0 到 1 之间的概率</text>
+
+  <circle cx="120" cy="132" r="22" class="bias-node"/>
+  <text x="120" y="138" text-anchor="middle" class="label">1</text>
+  <text x="120" y="169" text-anchor="middle" class="tiny">bias</text>
+  <circle cx="120" cy="222" r="28" class="input-node"/>
+  <text x="120" y="229" text-anchor="middle" class="label">x1</text>
+  <circle cx="120" cy="286" r="28" class="input-node"/>
+  <text x="120" y="293" text-anchor="middle" class="label">x2</text>
+
+  <line x1="142" y1="132" x2="300" y2="175" class="flow"/>
+  <line x1="146" y1="222" x2="300" y2="205" class="flow"/>
+  <line x1="146" y1="286" x2="300" y2="235" class="flow"/>
+  <text x="205" y="145" class="weight">b</text>
+  <text x="202" y="205" class="weight">w1</text>
+  <text x="202" y="275" class="weight">w2</text>
+
+  <circle cx="340" cy="205" r="38" class="sum-node"/>
+  <text x="340" y="198" text-anchor="middle" class="label">Σ</text>
+  <text x="340" y="225" text-anchor="middle" class="tiny">z</text>
+  <line x1="378" y1="205" x2="450" y2="205" class="flow"/>
+
+  <rect x="450" y="167" width="110" height="76" class="activation"/>
+  <text x="505" y="197" text-anchor="middle" class="label">激活函数</text>
+  <text x="505" y="222" text-anchor="middle" class="eq">sigmoid</text>
+  <line x1="560" y1="205" x2="640" y2="205" class="flow"/>
+
+  <circle cx="680" cy="205" r="28" class="output-node"/>
+  <text x="680" y="212" text-anchor="middle" class="label">p</text>
+
+  <rect x="72" y="264" width="836" height="44" class="note"/>
+  <text x="490" y="292" text-anchor="middle" class="eq">z = w_1 x_1 + w_2 x_2 + b,  \quad p = \sigma(z)</text>
+</svg>

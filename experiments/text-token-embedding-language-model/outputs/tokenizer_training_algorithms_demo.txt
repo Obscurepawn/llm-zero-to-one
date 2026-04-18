@@ -1,0 +1,138 @@
+Tokenizer Training Algorithms Demo
+============================================================
+
+Training corpus:
+  low low low lower lowest
+  new new new newer newest
+  wide wide wider widest
+  hug hug hug hugs hugged hugging
+  run run run runs runner running
+  token token token tokens tokenizer tokenizing
+
+Word frequencies:
+  hug          count=3
+  low          count=3
+  new          count=3
+  run          count=3
+  token        count=3
+  wide         count=2
+  hugged       count=1
+  hugging      count=1
+  hugs         count=1
+  lower        count=1
+  lowest       count=1
+  newer        count=1
+  newest       count=1
+  runner       count=1
+  running      count=1
+  runs         count=1
+  tokenizer    count=1
+  tokenizing   count=1
+  tokens       count=1
+  wider        count=1
+  widest       count=1
+
+1. Character-level tokenizer
+------------------------------------------------------------
+No optimization loss. Training just means collecting seen characters.
+Vocabulary size: 19
+First 24 vocab entries: ['<PAD>', '<UNK>', '\n', ' ', 'd', 'e', 'g', 'h', 'i', 'k', 'l', 'n', 'o', 'r', 's', 't', 'u', 'w', 'z']
+Sample word: 'tokenizer'
+Encoded ids: [15, 12, 9, 5, 11, 8, 18, 5, 13]
+Decoded text: 'tokenizer'
+
+2. BPE
+------------------------------------------------------------
+Training rule: repeatedly merge the most frequent adjacent pair.
+First 12 merges:
+  step= 1 pair=('u', 'n') count=6   -> merged=un
+  step= 2 pair=('u', 'g') count=6   -> merged=ug
+  step= 3 pair=('t', 'o') count=6   -> merged=to
+  step= 4 pair=('to', 'k') count=6   -> merged=tok
+  step= 5 pair=('tok', 'e') count=6   -> merged=toke
+  step= 6 pair=('toke', 'n') count=6   -> merged=token
+  step= 7 pair=('r', 'un') count=6   -> merged=run
+  step= 8 pair=('n', 'e') count=6   -> merged=ne
+  step= 9 pair=('h', 'ug') count=6   -> merged=hug
+  step=10 pair=('o', 'w') count=5   -> merged=ow
+  step=11 pair=('ne', 'w') count=5   -> merged=new
+  step=12 pair=('l', 'ow') count=5   -> merged=low
+Sample segmentations:
+  lower        -> ['low', 'e', 'r']
+  lowest       -> ['low', 'e', 'st']
+  hugging      -> ['hug', 'g', 'i', 'n', 'g']
+  running      -> ['run', 'n', 'i', 'n', 'g']
+  tokenizer    -> ['token', 'i', 'z', 'e', 'r']
+  tokenizing   -> ['token', 'i', 'z', 'i', 'n', 'g']
+
+3. WordPiece (teaching approximation)
+------------------------------------------------------------
+Training rule here uses score(pair) = pair_count / (count(left) * count(right)).
+This is a simplified tutorial version, not an exact production trainer.
+First 12 merges:
+  step= 1 pair=('##s', '##t') count=3   score=0.166667 -> merged=##st
+  step= 2 pair=('w', '##i') count=4   score=0.111111 -> merged=wi
+  step= 3 pair=('wi', '##d') count=4   score=0.200000 -> merged=wid
+  step= 4 pair=('##i', '##z') count=2   score=0.200000 -> merged=##iz
+  step= 5 pair=('##iz', '##i') count=1   score=0.166667 -> merged=##izi
+  step= 6 pair=('t', '##o') count=6   score=0.090909 -> merged=to
+  step= 7 pair=('l', '##o') count=5   score=0.200000 -> merged=lo
+  step= 8 pair=('to', '##k') count=6   score=0.166667 -> merged=tok
+  step= 9 pair=('lo', '##w') count=5   score=0.100000 -> merged=low
+  step=10 pair=('h', '##u') count=6   score=0.083333 -> merged=hu
+  step=11 pair=('r', '##u') count=6   score=0.166667 -> merged=ru
+  step=12 pair=('hu', '##g') count=6   score=0.090909 -> merged=hug
+Sample segmentations:
+  lower        -> ['low', '##e', '##r']
+  lowest       -> ['low', '##e', '##st']
+  hugging      -> ['huggi', '##n', '##g']
+  running      -> ['ru', '##n', '##n', '##i', '##n', '##g']
+  tokenizer    -> ['tok', '##e', '##n', '##iz', '##e', '##r']
+  tokenizing   -> ['tok', '##e', '##n', '##izi', '##n', '##g']
+
+4. Unigram
+------------------------------------------------------------
+Objective: minimize corpus negative log-likelihood with EM-style updates.
+When pruning shrinks the vocabulary, NLL can jump briefly before the next EM rounds adapt.
+Training history:
+  iter= 1 vocab_size=73  total_nll=208.4259
+  iter= 2 vocab_size=73  total_nll=148.0201
+  iter= 3 vocab_size=73  total_nll=136.7744
+  iter= 4 vocab_size=73  total_nll=134.0625
+  iter= 5 vocab_size=24  total_nll=133.5941
+  iter= 6 vocab_size=24  total_nll=488.5324
+  iter= 7 vocab_size=24  total_nll=155.2237
+  iter= 8 vocab_size=24  total_nll=155.2235
+Top pieces by probability:
+  piece=token        prob=0.105216
+  piece=hug          prob=0.105216
+  piece=run          prob=0.105216
+  piece=low          prob=0.087680
+  piece=new          prob=0.087680
+  piece=s            prob=0.070166
+  piece=wide         prob=0.070144
+  piece=er           prob=0.069825
+  piece=ing          prob=0.052565
+  piece=i            prob=0.035115
+  piece=n            prob=0.035115
+  piece=g            prob=0.035115
+  piece=z            prob=0.035072
+  piece=est          prob=0.035050
+  piece=e            prob=0.017877
+  piece=r            prob=0.017855
+  piece=t            prob=0.017558
+  piece=d            prob=0.017536
+Sample segmentations:
+  lower        -> ['low', 'er']
+  lowest       -> ['low', 'est']
+  hugging      -> ['hug', 'g', 'ing']
+  running      -> ['run', 'n', 'ing']
+  tokenizer    -> ['token', 'i', 'z', 'er']
+  tokenizing   -> ['token', 'i', 'z', 'ing']
+
+Quick comparison
+------------------------------------------------------------
+Character-level: no loss, no merge search, one char = one token.
+BPE: greedy frequency merges, easy to implement, very intuitive.
+WordPiece: prefers strongly associated merges, often yields cleaner subwords.
+Unigram: probabilistic model with an explicit likelihood objective.

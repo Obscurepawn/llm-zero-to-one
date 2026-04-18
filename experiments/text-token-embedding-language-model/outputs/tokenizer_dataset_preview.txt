@@ -1,0 +1,94 @@
+Week 5 tokenizer and language-model preview
+================================================
+
+Vocabulary size: 30
+Corpus length (characters): 1517
+Context size: 6
+
+First 30 vocabulary entries:
+  id= 0 token=<PAD>
+  id= 1 token=<UNK>
+  id= 2 token=<newline>
+  id= 3 token=<space>
+  id= 4 token=.
+  id= 5 token=a
+  id= 6 token=b
+  id= 7 token=c
+  id= 8 token=d
+  id= 9 token=e
+  id=10 token=f
+  id=11 token=g
+  id=12 token=h
+  id=13 token=i
+  id=14 token=k
+  id=15 token=l
+  id=16 token=m
+  id=17 token=n
+  id=18 token=o
+  id=19 token=p
+  id=20 token=q
+  id=21 token=r
+  id=22 token=s
+  id=23 token=t
+  id=24 token=u
+  id=25 token=v
+  id=26 token=w
+  id=27 token=x
+  id=28 token=y
+  id=29 token=z
+
+Top token frequencies:
+  token=   <space> count=222
+  token=         e count=222
+  token=         t count=132
+  token=         n count=126
+  token=         o count=90
+  token=         a count=84
+  token=         r count=84
+  token=         s count=72
+  token=         d count=66
+  token=         i count=54
+  token=         c count=42
+  token=         m count=42
+  token=         g count=36
+  token=         . count=30
+  token=         l count=30
+  token= <newline> count=29
+  token=         k count=24
+  token=         u count=24
+  token=         x count=24
+  token=         b count=18
+
+Sample text: 'language models'
+Encoded ids: [15, 5, 17, 11, 24, 5, 11, 9, 3, 16, 18, 8, 9, 15, 22]
+Decoded text: 'language models'
+
+First 12 next-token samples:
+  context_ids=[23, 9, 27, 23, 3, 6] context_text='text b' -> target_id=9 target_text='e'
+  context_ids=[9, 27, 23, 3, 6, 9] context_text='ext be' -> target_id=7 target_text='c'
+  context_ids=[27, 23, 3, 6, 9, 7] context_text='xt bec' -> target_id=18 target_text='o'
+  context_ids=[23, 3, 6, 9, 7, 18] context_text='t beco' -> target_id=16 target_text='m'
+  context_ids=[3, 6, 9, 7, 18, 16] context_text=' becom' -> target_id=9 target_text='e'
+  context_ids=[6, 9, 7, 18, 16, 9] context_text='become' -> target_id=22 target_text='s'
+  context_ids=[9, 7, 18, 16, 9, 22] context_text='ecomes' -> target_id=3 target_text=' '
+  context_ids=[7, 18, 16, 9, 22, 3] context_text='comes ' -> target_id=23 target_text='t'
+  context_ids=[18, 16, 9, 22, 3, 23] context_text='omes t' -> target_id=18 target_text='o'
+  context_ids=[16, 9, 22, 3, 23, 18] context_text='mes to' -> target_id=14 target_text='k'
+  context_ids=[9, 22, 3, 23, 18, 14] context_text='es tok' -> target_id=9 target_text='e'
+  context_ids=[22, 3, 23, 18, 14, 9] context_text='s toke' -> target_id=17 target_text='n'
+Order-sensitive next-token task
+================================================
+
+Example patterns:
+  context=['b', 'a'] -> target=y
+  context=['c', 'd'] -> target=m
+  context=['c', 'd'] -> target=m
+  context=['b', 'a'] -> target=y
+  context=['d', 'c'] -> target=n
+  context=['a', 'b'] -> target=x
+  context=['a', 'b'] -> target=x
+  context=['d', 'c'] -> target=n
+
+Final validation accuracy:
+  bag_of_embeddings: 0.4896
+  position_aware: 1.0000

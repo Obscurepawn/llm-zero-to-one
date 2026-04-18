@@ -123,6 +123,10 @@ def binary_cross_entropy(y_true: np.ndarray, y_prob: np.ndarray) -> float:
     这两种情况的惩罚都会很大。
     """
     epsilon = 1e-8
+    # 交叉熵里后面会计算 log(y_prob) 和 log(1 - y_prob)。
+    # 如果概率刚好等于 0 或 1，就会出现 log(0)，结果变成负无穷，
+    # 进一步会让 loss 变成 inf 或 nan。这里用 clip 把概率限制在
+    # 一个非常接近 0 和 1、但又不真正碰到边界的安全区间里。
     y_prob = np.clip(y_prob, epsilon, 1.0 - epsilon)
     loss = -np.mean(y_true * np.log(y_prob) + (1.0 - y_true) * np.log(1.0 - y_prob))
     return float(loss)
@@ -248,11 +252,24 @@ def plot_dataset_and_boundary(
     w1 = float(weight[0, 0])
     w2 = float(weight[1, 0])
 
-    # 如果 w2 非常接近 0，边界会接近竖直线；这里做个保护。
+    # 分类边界满足：
+    #     w1 * x1 + w2 * x2 + b = 0
+    #
+    # 如果 w2 不接近 0，就可以改写成：
+    #     x2 = -(w1 * x1 + b) / w2
+    # 这样就能像画普通函数曲线一样，给一串 x1 算出对应的 x2。
+    #
+    # 但如果 w2 非常接近 0，上面这条式子就会变成“除以一个很小的数”，
+    # 数值会非常不稳定。此时边界更适合写成：
+    #     x1 = -b / w1
+    # 这在图上是一条竖直线，所以要单独处理。
     if abs(w2) > 1e-8:
         x_values = np.linspace(x[:, 0].min() - 0.5, x[:, 0].max() + 0.5, 200)
         y_values = -(w1 * x_values + bias) / w2
         plt.plot(x_values, y_values, color="black", linewidth=2.5, label="Decision boundary")
+    elif abs(w1) > 1e-8:
+        x_boundary = -bias / w1
+        plt.axvline(x=x_boundary, color="black", linewidth=2.5, label="Decision boundary")
 
     plt.xlabel("feature 1 (standardized)")
     plt.ylabel("feature 2 (standardized)")
@@ -261,6 +278,52 @@ def plot_dataset_and_boundary(
     plt.tight_layout()
 
     output_path = OUTPUT_DIR / "logistic_regression_boundary.png"
+    plt.savefig(output_path, dpi=180)
+    plt.close()
+    return output_path
+
+
+def plot_w2_zero_boundary_example(x: np.ndarray, y: np.ndarray) -> Path:
+    """
+    单独画一张 w2 = 0 时的示意图。
+
+    当 w2 = 0 时，分类边界从：
+        w1 * x1 + w2 * x2 + b = 0
+
+    变成：
+        w1 * x1 + b = 0
+
+    也就是：
+        x1 = -b / w1
+
+    这说明边界不再依赖 x2，所以图上会是一条竖直线。
+    """
+    x0 = x[y[:, 0] == 0]
+    x1 = x[y[:, 0] == 1]
+
+    # 这里故意把边界设在 x1 = 0，便于和标准化后的数据一起观察。
+    demo_w1 = 1.0
+    demo_w2 = 0.0
+    demo_bias = 0.0
+    x_boundary = -demo_bias / demo_w1
+
+    plt.figure(figsize=(8, 6))
+    plt.scatter(x0[:, 0], x0[:, 1], alpha=0.7, label="Class 0")
+    plt.scatter(x1[:, 0], x1[:, 1], alpha=0.7, label="Class 1")
+    plt.axvline(
+        x=x_boundary,
+        color="black",
+        linewidth=2.5,
+        label=f"Boundary when w2 = {demo_w2:.1f}",
+    )
+
+    plt.xlabel("feature 1 (standardized)")
+    plt.ylabel("feature 2 (standardized)")
+    plt.title("Example: Decision Boundary When w2 = 0")
+    plt.legend()
+    plt.tight_layout()
+
+    output_path = OUTPUT_DIR / "logistic_regression_w2_zero_boundary.png"
     plt.savefig(output_path, dpi=180)
     plt.close()
     return output_path
@@ -325,6 +388,7 @@ def main() -> None:
         weight=best_result["weight"],  # type: ignore[arg-type]
         bias=float(best_result["bias"]),
     )
+    w2_zero_demo_path = plot_w2_zero_boundary_example(x=x, y=y)
     loss_path = plot_loss_histories(histories)
 
     final_probabilities = best_result["final_probabilities"]  # type: ignore[assignment]
@@ -340,6 +404,7 @@ def main() -> None:
     print(f"Learned weight:  {learned_weight.ravel()}")
     print(f"Learned bias:    {learned_bias:.4f}")
     print(f"Saved boundary plot: {boundary_path}")
+    print(f"Saved w2=0 demo plot: {w2_zero_demo_path}")
     print(f"Saved loss plot: {loss_path}")
 
 

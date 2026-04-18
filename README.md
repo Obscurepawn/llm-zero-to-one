@@ -20,12 +20,10 @@ docs/
     assets/
 
 experiments/
-  transformer/
-    linear-and-logistic-regression/
+  linear-and-logistic-regression/
 
 notes/
-  transformer/
-    transformer-study-path.md
+  transformer-study-path.md
 ```
 
 ## 当前内容
@@ -39,7 +37,7 @@ notes/
 在实验目录下执行：
 
 ```bash
-cd experiments/transformer/linear-and-logistic-regression
+cd experiments/linear-and-logistic-regression
 python linear_regression_numpy.py
 python logistic_regression_numpy.py
 python run_all.py

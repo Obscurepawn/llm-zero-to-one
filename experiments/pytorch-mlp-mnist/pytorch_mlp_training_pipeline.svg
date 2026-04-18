@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1540" height="620" viewBox="0 0 1540 620">
+  <defs>
+    <style>
+      .title { font: 700 30px 'Noto Sans SC', 'Microsoft YaHei', sans-serif; fill: #111827; }
+      .subtitle { font: 500 18px 'Noto Sans SC', 'Microsoft YaHei', sans-serif; fill: #4b5563; }
+      .section { font: 700 22px 'Noto Sans SC', 'Microsoft YaHei', sans-serif; fill: #111827; }
+      .label { font: 600 18px 'Noto Sans SC', 'Microsoft YaHei', sans-serif; fill: #111827; }
+      .small { font: 500 16px 'Noto Sans SC', 'Microsoft YaHei', sans-serif; fill: #4b5563; }
+      .code { font: 600 16px 'JetBrains Mono', 'Consolas', monospace; fill: #1f2937; }
+      .panel { fill: #f8fafc; stroke: #1f2937; stroke-width: 2; rx: 18; ry: 18; }
+      .node-data { fill: #ecfccb; stroke: #3f6212; stroke-width: 2; rx: 16; ry: 16; }
+      .node-model { fill: #dbeafe; stroke: #1d4ed8; stroke-width: 2; rx: 16; ry: 16; }
+      .node-loss { fill: #fee2e2; stroke: #b91c1c; stroke-width: 2; rx: 16; ry: 16; }
+      .node-opt { fill: #fef3c7; stroke: #a16207; stroke-width: 2; rx: 16; ry: 16; }
+      .arrow { stroke: #2563eb; stroke-width: 4; fill: none; marker-end: url(#arrowhead); }
+      .arrow-back { stroke: #dc2626; stroke-width: 4; fill: none; marker-end: url(#arrowhead-red); stroke-dasharray: 10 8; }
+    </style>
+    <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrowhead-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+
+  <rect width="1540" height="620" fill="#ffffff"/>
+  <text x="770" y="44" text-anchor="middle" class="title">第 4 周：PyTorch 训练骨架图</text>
+  <text x="770" y="76" text-anchor="middle" class="subtitle">这一周的重点不是手写梯度，而是读懂 Dataset、DataLoader、nn.Module、loss.backward() 和 optimizer.step() 是怎么连起来的。</text>
+
+  <rect x="40" y="120" width="1460" height="430" class="panel"/>
+  <text x="770" y="158" text-anchor="middle" class="section">标准训练循环</text>
+
+  <rect x="70" y="228" width="170" height="112" class="node-data"/>
+  <text x="155" y="266" text-anchor="middle" class="label">Dataset</text>
+  <text x="155" y="296" text-anchor="middle" class="code">MNIST(...)</text>
+  <text x="155" y="324" text-anchor="middle" class="small">定义单个样本怎么取</text>
+
+  <rect x="290" y="228" width="186" height="112" class="node-data"/>
+  <text x="383" y="266" text-anchor="middle" class="label">DataLoader</text>
+  <text x="383" y="296" text-anchor="middle" class="code">batch_size / shuffle</text>
+  <text x="383" y="324" text-anchor="middle" class="small">把样本组织成批次</text>
+
+  <rect x="530" y="210" width="232" height="148" class="node-model"/>
+  <text x="646" y="248" text-anchor="middle" class="label">nn.Module</text>
+  <text x="646" y="278" text-anchor="middle" class="code">MLPClassifier</text>
+  <text x="646" y="308" text-anchor="middle" class="code">Linear -> ReLU -> Dropout</text>
+  <text x="646" y="336" text-anchor="middle" class="code">-> Linear -> ReLU -> Linear</text>
+
+  <rect x="818" y="228" width="176" height="112" class="node-loss"/>
+  <text x="906" y="266" text-anchor="middle" class="label">Loss</text>
+  <text x="906" y="296" text-anchor="middle" class="code">CrossEntropyLoss</text>
+  <text x="906" y="324" text-anchor="middle" class="small">衡量预测和标签差多远</text>
+
+  <rect x="1054" y="210" width="184" height="148" class="node-model"/>
+  <text x="1146" y="248" text-anchor="middle" class="label">Autograd</text>
+  <text x="1146" y="280" text-anchor="middle" class="code">loss.backward()</text>
+  <text x="1146" y="310" text-anchor="middle" class="small">根据计算图自动求梯度</text>
+  <text x="1146" y="338" text-anchor="middle" class="small">这一步替代第 3 周手写 backward</text>
+
+  <rect x="1288" y="228" width="176" height="112" class="node-opt"/>
+  <text x="1376" y="266" text-anchor="middle" class="label">Optimizer</text>
+  <text x="1376" y="296" text-anchor="middle" class="code">optimizer.step()</text>
+  <text x="1376" y="324" text-anchor="middle" class="small">按梯度更新参数</text>
+
+  <path class="arrow" d="M 240 284 L 290 284"/>
+  <path class="arrow" d="M 476 284 L 530 284"/>
+  <path class="arrow" d="M 762 284 L 818 284"/>
+  <path class="arrow" d="M 994 284 L 1054 284"/>
+  <path class="arrow" d="M 1238 284 L 1288 284"/>
+
+  <path class="arrow-back" d="M 1054 394 C 980 470, 790 496, 646 496 C 500 496, 356 470, 290 396"/>
+  <text x="670" y="472" text-anchor="middle" class="small">反向传播的方向：loss -> gradients -> parameters</text>
+
+  <rect x="210" y="404" width="1120" height="96" class="panel"/>
+  <text x="770" y="438" text-anchor="middle" class="code">for images, labels in train_loader: logits = model(images); loss = criterion(logits, labels)</text>
+  <text x="770" y="468" text-anchor="middle" class="code">optimizer.zero_grad(); loss.backward(); optimizer.step()</text>
+  <text x="770" y="494" text-anchor="middle" class="small">这就是第 4 周最重要的训练循环骨架。</text>
+</svg>
